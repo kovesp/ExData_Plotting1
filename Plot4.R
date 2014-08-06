@@ -10,29 +10,27 @@
 # Parameters:
 #      Parameters to override the defaults for load data, see below.
 #      The data may be passed in explictly (fore ease of testing only.)
+#      fn is the name of the PNG file to receive the plot
 # Returns:
 #      The name of the PNG file in which the plot was created
 #
 # The defaults for the parameters of loadData are set for ExData_Plotting1
 # so normally the function can be called with no parameters.
-plot4 <- function(data=NULL,...) {
+plot4 <- function(data=NULL,fn="plot4.png",...) {
    
    if (is.null(data)) data <- loadData(4,...)
    
-   doPlots(data) # To screen
-
-   # For some reason copying to png does not work for this.
-   # So in this case just repeat the plots directing to PNG.
-   fn<-"plot4.png"   
+   doPlots4(data)
    png(filename=fn,width=480,height=480)
-   doPlots(data) # To png
+   doPlots4(data)
    dev.off()
+
    fn   
 }
 
 ## Create the 4 plots. Done in a sepearate fucntion so it can be repeated
 ## for the screen and for PNG.
-doPlots <- function(data) {
+doPlots4 <- function(data) {
    par(mfcol=c(2,2))
    
    # Plot a.

@@ -6,28 +6,40 @@
 # Parameters:
 #      Parameters to override the defaults for load data, see below.
 #      The data may be passed in explictly (fore ease of testing only.)
+#      fn is the name of the PNG file to receive the plot
 # Returns:
 #      The name of the PNG file in which the plot was created
 #
 # The defaults for the parameters of loadData are set for ExData_Plotting1
 # so normally the function can be called with no parameters.
-plot3 <- function(data=NULL,...) {
+plot3 <- function(data=NULL,fn="plot3.png",...) {
    
    if (is.null(data)) data <- loadData(3,...)
    
+   doPlots3(data)
+   png(filename=fn,width=480,height=480)
+   doPlots3(data)
+   dev.off()
+   
+   fn
+}
+
+## Create the plots. Done in a sepearate fucntion so it can be repeated
+## for the screen and for PNG.
+doPlots3 <- function(data) {
    par(mfcol=c(1,1))
+   
    main<-""
    xlab<-""
    ylab<-"Energy sub metering"
    col<-c("black","red","blue")
    sel<-c("Sub_metering_1","Sub_metering_2","Sub_metering_3")
-    plot(data$Time,data[[sel[1]]],type='l',col=col[1],main=main,xlab=xlab,ylab=ylab);
+   plot(data$Time,data[[sel[1]]],type='l',col=col[1],main=main,xlab=xlab,ylab=ylab);
    lines(data$Time,data[[sel[2]]],col=col[2]);
    lines(data$Time,data[[sel[3]]],col=col[3])
    legend("topright",legend=sel,col=col,lty="solid")
-   
-   savePlot(3)
-}
+}   
+
 
 ## Load the data set from the text file.
 #
@@ -61,14 +73,4 @@ loadData <- function(N,
    data <- data[2:ncol(data)]
    
    data
-}
-
-## Save the currently displayed plot as a 480x480 pixel PNG into a file
-## called 'plotN.png' and return the name of the file.
-#
-savePlot<-function(N) {
-   fn<-sprintf("plot%d.png",N)   
-   dev.copy(png,filename=fn,width=480,height=480)
-   dev.off()
-   fn
 }
